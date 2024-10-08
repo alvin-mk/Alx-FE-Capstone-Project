@@ -5,213 +5,209 @@ import React, { useState } from "react";
 
 const App = () => {
 
-  const [city, setCity] = useState("");
+ const [city, setCity] = useState("");
 
-  const [weatherData, setWeatherData] = useState(null);
+ const [weatherData, setWeatherData] = useState(null);
 
-  const [error, setError] = useState(null);
-
-
- 
-
-  // i used my OpenWeatherMap API Key here
-
-  const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+ const [error, setError] = useState(null);
 
 
  
 
-  const fetchWeather = async (city) => {
+ // Use your OpenWeatherMap API Key here
 
-    try {
-
-      const response = await fetch(
-
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
-
-      );
+ const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
 
 
  
 
-      if (!response.ok) {
+ const fetchWeather = async (city) => {
 
-        const errorResponse = await response.json(); // Get the error response
+   try {
 
-        console.error('Error response:', errorResponse); // Log the error response
+     const response = await fetch(
 
-        if (response.status === 404) {
+       `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
 
-          throw new Error("City not found");
-
-        } else {
-
-          throw new Error("Failed to fetch weather data");
-
-        }
-
-      }
+     );
 
 
  
 
-      const data = await response.json();
+     if (!response.ok) {
 
-      setWeatherData(data);
+       const errorResponse = await response.json(); // Get the error response
 
-      setError(null);
+       console.error('Error response:', errorResponse); // Log the error response
 
-    } catch (err) {
+       if (response.status === 404) {
 
-      console.error(err);
+         throw new Error("City not found");
 
-      setWeatherData(null);
+       } else {
 
-      setError(err.message);
+         throw new Error("Failed to fetch weather data");
 
-    }
+       }
 
-  };
-
-
- 
-
-  const handleSearch = (e) => {
-
-    e.preventDefault();
-
-    fetchWeather(city.trim());
-
-    setCity(""); // Clear the input field after submission
-
-  };
+     }
 
 
  
 
-  return (
+     const data = await response.json();
 
-    <div
+     setWeatherData(data);
 
-      className="bg-no-repeat bg-contain"
+     setError(null);
 
-     // style={{ backgroundImage: "url('https://images.pexels.com/photos/53594/blue-clouds-day-fluffy-53594.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1.jpg')" }} // Update with your image path
+   } catch (err) {
 
-    >
+     console.error(err);
 
-      {/* Header */}
+     setWeatherData(null);
 
-      <header className="bg-blue-600 text-white py-4">
+     setError(err.message);
 
-        <h1 className="text-3xl font-bold text-center">Weather Dashboard </h1>
+   }
 
-      </header>
-
-
- 
-
-      {/* Main Content */}
-
-      <main className="bg-blue-300 flex-grow p-4">
-
-         <div className="container mx-auto p-4 border-4 border-gray-800 rounded-lg shadow-lg max-w-md"></div>
-
-        {/* Search Bar */}
-
-        <form onSubmit={handleSearch} className="mb-4 justify-center  flex">
-
-          <input
-
-            type="text"
-
-            value={city}
-
-            onChange={(e) => setCity(e.target.value)}
-
-            placeholder="Enter city name"
-
-           classNam e="p-90 border  border-gray-300 rounded-l-md"
-
-            required
-
-          />
-
-          <button
-
-            type="submit"
-
-            className="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-500 transition "
-
-          >
-
-            Search
-
-          </button>
-
-        </form>
+ };
 
 
  
 
-        {/* Error Message */}
+ const handleSearch = (e) => {
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
+   e.preventDefault();
 
+   fetchWeather(city.trim());
 
- 
+   setCity(""); // Clear the input field after submission
 
-        {/* Weather Data Display */}
-
-        {weatherData && (
-
-          <div className="bg-white  rounded p-4 text-center w-full max-w-sm border border-gray-300 justify-center">
-
-           <h2 className="text-xl font-semibold">{weatherData.name}</h2>
-
-           
-
-           
-
-            <p className="text-lg justify-center">
-
-              {Math.round(weatherData.main.temp)}°C
-
-            </p>
-
-            <p className="font-weight: 600;">Humidity: {weatherData.main.humidity}%</p>
-
-            <p>Wind Speed: {Math.round(weatherData.wind.speed)} km/h</p>
-
-            <p className="justify-center"><img
-
-              src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
-
-              alt={weatherData.weather[0].description}
-
-            /></p>
-
-            <p>{weatherData.weather[0].description}</p>
-
-          </div>
-
-        )}
-
-      </main>
+ };
 
 
  
 
-      {/* Footer */}
+ return (
 
-      <footer className="bg-gray-800 text-white py-4 text-center">
+   <div
 
-        <p>&copy; 2024 Weather Dashboard. All rights reserved.</p>
+     className="min-h-screen bg-cover bg-center"
 
-      </footer>
+     style={{ backgroundImage: "url('/path/to/your/background-image.jpg')" }} // Update with your image path
 
-    </div>
+   >
 
-  );
+     {/* Header */}
+
+     <header className="bg-blue-600 text-white py-4">
+
+       <h1 className="text-3xl font-bold text-center italic ">Weather Dashboard</h1>
+
+     </header>
+
+
+ 
+
+     {/* Main Content */}
+
+     <main className="flex flex-col items-center mt-10 h-screen">
+
+       {/* Search Bar */}
+
+       <form onSubmit={handleSearch} className="mb-4 flex ">
+
+         <input
+
+           type="text"
+
+           value={city}
+
+           onChange={(e) => setCity(e.target.value)}
+
+           placeholder="Enter city name"
+
+           className="p-2 border border-blue-300 rounded-l-md"
+
+           required
+
+         />
+
+         <button
+
+           type="submit"
+
+           className="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-500 transition"
+
+         >
+
+           Search
+
+         </button>
+
+       </form>
+
+
+ 
+
+       {/* Error Message */}
+
+       {error && <p className="text-red-500 text-center font-weight: 900;">{error}</p>}
+
+
+ 
+
+       {/* Weather Data Display */}
+
+       {weatherData && (
+
+         <div className="bg-white shadow-md rounded p-4 text-center w-full max-w-sm border border-gray-300">
+
+           <h2 className="text-xl font-semibold text-green-500 italic hover:not-italic">{weatherData.name}</h2>
+
+           <p className="text-lg font-serif font-semibold">
+
+             {Math.round(weatherData.main.temp)}°C
+
+           </p>
+
+           <p className="font-serif font-semibold mt-3">{weatherData.weather[0].description}</p>
+
+          <p className="justify-center"> <img
+
+             src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+
+             alt={weatherData.weather[0].description}
+
+           /></p>
+
+           <p className="font-extrabold mt-10  text-yellow-500">Humidity: {weatherData.main.humidity}%</p>
+
+           <p className="font-bold mt-5  text-yellow-500">Wind Speed: {Math.round(weatherData.wind.speed)} km/h</p>
+
+         
+
+         </div>
+
+       )}
+
+     </main>
+
+
+ 
+
+     {/* Footer */}
+
+     <footer className="bg-gray-800 text-white py-4 text-center">
+
+       <p>© 2024 Weather Dashboard. All rights reserved.</p>
+
+     </footer>
+
+   </div>
+
+ );
 
 };
 
@@ -220,5 +216,9 @@ const App = () => {
 
 export default App;
 
+ 
+
+
+ 
 
  
