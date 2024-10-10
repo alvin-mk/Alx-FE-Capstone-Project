@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
  
@@ -11,6 +11,8 @@ const App = () => {
 
  const [error, setError] = useState(null);
 
+ const [isFocused, setIsFocused] = useState(false);
+
 
  
 
@@ -21,24 +23,24 @@ const App = () => {
 
  
 
- const fetchWeather = async (city) => {
+ const fetchWeather = async (cityName) => {
 
    try {
 
      const response = await fetch(
 
-       `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+       `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${apiKey}`
 
      );
 
-
- 
-
      if (!response.ok) {
 
-       const errorResponse = await response.json(); // Get the error response
+       const errorResponse = await response.json();
 
-       console.error('Error response:', errorResponse); // Log the error response
+       console.error('Error response:', errorResponse);
+
+
+ 
 
        if (response.status === 404) {
 
@@ -76,6 +78,17 @@ const App = () => {
 
  
 
+ // Fetch Nairobi weather when component mounts
+
+ useEffect(() => {
+
+   fetchWeather("Nairobi");
+
+ }, []);
+
+
+ 
+
  const handleSearch = (e) => {
 
    e.preventDefault();
@@ -91,19 +104,13 @@ const App = () => {
 
  return (
 
-   <div
-
-     className="min-h-screen bg-gradient-to-r from-[rgb(45,56,123)] to-[rgb(76,67,109)] p-4 bg-cover bg-center"
-
-  >  "
-
-   
+   <div className="min-h-screen bg-gradient-to-r from-[#373b44] to-[#4286f4]">
 
      {/* Header */}
 
-     <header className=" text-gray-900 py-7  border-width: 0px;">
+     <header className="text-white py-7">
 
-       <h1 className="text-4xl font-extrabold text-center italic ">Weather Dashboard</h1>
+       <h1 className="text-4xl font-extrabold text-center italic">Weather Dashboard</h1>
 
      </header>
 
@@ -112,177 +119,191 @@ const App = () => {
 
      {/* Main Content */}
 
-      <main className="flex flex-col items-center mt-5 h-screen filter: blur(8px);">
+     <main className="flex flex-col items-center mt-5 h-screen">
 
-       {/* Search Bar */}
+       {/* Container for Search Bar and Weather Data */}
 
-       <form onSubmit={handleSearch} className="mb-4 flex ">
+       <div className="border border-gray-300 rounded-lg p-6 bg-opacity-30 backdrop-blur-sm">
 
-         <input
+         {/* Search Bar */}
 
-           type="text"
+         <form onSubmit={handleSearch} className="mb-4 flex">
 
-           value={city}
+           <input
 
-           onChange={(e) => setCity(e.target.value)}
+             type="text"
 
-           placeholder="Enter city name"
+             value={city}
 
-           className="text-white border rounded-full p-2 pl-10 transition-all duration-300 ease-in-out bg-[rgb(79,92,152)] ${isFocused ? 'w-4/5' : 'w-full'} border-transparent`}
+             onChange={(e) => setCity(e.target.value)}
 
-      onFocus={() => setIsFocused(true)}
+             placeholder="Enter city name"
 
-      onBlur={() => setIsFocused(false)}
+             className={`text-white rounded-full p-2 pl-10 transition-all duration-300 ease-in-out  ${
 
-      required"
+               isFocused ? 'w-4/5' : 'w-full'
 
-         />
+             }`}
 
-          <button
+             onFocus={() => setIsFocused(true)}
 
-           type="submit"
+             onBlur={() => setIsFocused(false)}
 
-           className="bg-[rgb(79,92,152)] font-serif text-white p-2 rounded-full hover:bg-blue-300   ms-2"
+             required
 
-         >Search
+           />
 
-         </button>
+           <button
 
-       </form>
+             type="submit"
 
+             className="bg-[rgb(79,92,152)] font-serif text-white p-2 rounded-full hover:bg-blue-300 ms-2"
 
- 
+           >
 
-       {/* Error Message */}
+             Search
 
-       {error && <p className="text-red-500 text-center font-semibold">{error}</p>}
+           </button>
 
-
- 
-
-       {/* Weather Data Display */}
-
-       {weatherData && (
-
-          <div className= "filter: blur(8px);  shadow-md rounded-xl p-4 text-center w-full max-w-sm bg-gradient-to-r bg-opacity-30 border-opacity-40 transition-transform duration-300 ease-in-out hover:scale-110 hover:bg-opacity-50 mt-3">
-
-           <h2 className="text-xl font-semibold text-green-500 ">{weatherData.name}</h2>
-
-           <p className="text-lg font-serif font-semibold mt-3 text-white">
-
-             {Math.round(weatherData.main.temp)}°C
-
-           </p>
-
-           <p className="font-serif font-semibold mt-3">{weatherData.weather[0].description}</p>
-
-          <p className="flex justify-center"> <img
-
-             src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
-
-             alt={weatherData.weather[0].description}
-
-           /></p>
+         </form>
 
 
  
 
-           {/* Icons for Humidity and Wind Speed */}
+         {/* Error Message */}
 
-    <div className="flex justify-around mt-5">
-
-      <div className="flex items-center">
-
-        {/* Humidity Icon */}
-
-        <svg
-
-          xmlns="http://www.w3.org/2000/svg"
-
-          className="h-6 w-6 text-yellow-500 mr-1"
-
-          fill="none"
-
-          viewBox="0 0 24 24"
-
-          stroke="currentColor"
-
-        >
-
-          <path
-
-            strokeLinecap="round"
-
-            strokeLinejoin="round"
-
-            strokeWidth={2}
-
-            d="M12 8v4m0 4h.01M12 4h.01M8 4h8m-8 0a8 8 0 01-8 8 8 8 0 018 8 8 8 0 018-8 8 8 0 01-8-8m0 16a8 8 0 010-16 8 8 0 000 16z"
-
-          />
-
-        </svg>
-
-        <span className="font-extrabold text-yellow-500">
-
-        Humidity:{weatherData.main.humidity}%
-
-        </span>
-
-      </div>
+         {error && <p className="text-red-500 text-center font-semibold">{error}</p>}
 
 
  
 
-      <div className="flex items-center">
+         {/* Weather Data Display */}
 
-        {/* Wind Icon */}
+         {weatherData && (
 
-        <svg
+           <div className="shadow-md rounded-xl p-4 text-center w-full max-w-sm bg-gradient-to-r bg-opacity-30 transition-transform duration-300 ease-in-out hover:scale-110 hover:bg-opacity-50 mt-3">
 
-          xmlns="http://www.w3.org/2000/svg"
+             <h2 className="text-xl font-semibold text-green-500">{weatherData.name}</h2>
 
-          className="h-6 w-6 text-yellow-500 mr-1"
+             <p className="text-lg font-serif font-semibold mt-3 text-white">
 
-          fill="none"
+               {Math.round(weatherData.main.temp)}°C
 
-          viewBox="0 0 24 24"
+             </p>
 
-          stroke="currentColor"
+             <p className="font-serif text-white font-semibold mt-3">{weatherData.weather[0].description}</p>
 
-        >
+             <p className="flex justify-center">
 
-          <path
+               <img
 
-            strokeLinecap="round"
+                 src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
 
-            strokeLinejoin="round"
+                 alt={weatherData.weather[0].description}
 
-            strokeWidth={2}
+               />
 
-            d="M16 12h-4m4 4h-4m0-8h4m-6 0H8m4 0H6m0 0H4m6 0H2m8 8a2 2 0 00-2-2m0 0a2 2 0 00-2 2m2-2h8"
+             </p>
 
-          />
 
-        </svg>
+ 
 
-        <span className="font-bold text-yellow-500">
+             {/* Icons for Humidity and Wind Speed */}
 
-        Wind: {Math.round(weatherData.wind.speed)} km/h
+             <div className="flex justify-around mt-5">
 
-        </span>
+               <div className="flex items-center">
 
-      </div>
+                 <svg
 
-    </div>
+                   xmlns="http://www.w3.org/2000/svg"
 
-  </div>
+                   className="h-6 w-6 text-yellow-500  mr-1"
 
-)}
+                   fill="none"
 
-          </main>
+                   viewBox="0 0 24 24"
 
-     
+                   stroke="currentColor"
+
+                 >
+
+                   {/* New Water Drop Icon for Humidity */}
+
+                   <path
+
+                     strokeLinecap="round"
+
+                     strokeLinejoin="round"
+
+                     strokeWidth={2}
+
+                     d="M12 21.5C16.6944 21.5 20.5 17.6944 20.5 13C20.5 6.5 12 2.5 12 2.5C12 2.5 3.5 6.5 3.5 13C3.5 17.6944 7.30558 21.5 12 21.5Z"
+
+                   />
+
+                 </svg>
+
+                 <span className="font-extrabold text-yellow-500 ml-2 ">
+
+                   Humidity: {weatherData.main.humidity}%
+
+                 </span>
+
+               </div>
+
+
+ 
+
+               <div className="flex items-center">
+
+                 <svg
+
+                   xmlns="http://www.w3.org/2000/svg"
+
+                   className="h-6 w-6 text-yellow-500 mr-1"
+
+                   fill="none"
+
+                   viewBox="0 0 24 24"
+
+                   stroke="currentColor"
+
+                 >
+
+                   {/* New Wind Icon */}
+
+                   <path
+
+                     strokeLinecap="round"
+
+                     strokeLinejoin="round"
+
+                     strokeWidth={2}
+
+                     d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"
+
+                   />
+
+                 </svg>
+
+                 <span className="font-bold text-yellow-500 mx- ">
+
+                   Wind: {Math.round(weatherData.wind.speed)} km/h
+
+                 </span>
+
+               </div>
+
+             </div>
+
+           </div>
+
+         )}
+
+       </div>
+
+     </main>
 
 
  
@@ -305,6 +326,3 @@ const App = () => {
  
 
 export default App;
-
- 
-
