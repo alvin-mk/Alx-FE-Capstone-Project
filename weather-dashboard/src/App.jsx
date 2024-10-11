@@ -50,22 +50,35 @@ const App = () => {
    setDarkMode(!darkMode);
  };
 
+ const getBackgroundImage = () => {
+   if (!weatherData) return "";
+
+   const condition = weatherData.weather[0].main.toLowerCase();
+   switch (condition) {
+     case "clear":
+       return "url('https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80')";
+     case "clouds":
+       return "url('https://images.unsplash.com/photo-1534088568595-a066f410bcda?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=902&q=80')";
+     case "rain":
+       return "url('https://images.unsplash.com/photo-1428592953211-077101b2021b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80')";
+     case "snow":
+       return "url('https://images.unsplash.com/photo-1491002052546-bf38f186af56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1108&q=80')";
+     default:
+       return "url('https://images.unsplash.com/photo-1580193769210-b8d1c049a7d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80')";
+   }
+ };
+
  return (
    <div
-     className={`min-h-screen transition-all duration-500 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}
+     className={`min-h-screen bg-cover bg-center transition-all duration-500 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}
+     style={{ backgroundImage: getBackgroundImage() }}
    >
-     {/* Header */}
      <header className="py-7 bg-black bg-opacity-50">
        <h1 className="text-4xl font-extrabold text-center italic text-white">Weather Dashboard</h1>
      </header>
 
-     {/* Main Content */}
      <main className="flex flex-col items-center mt-5 min-h-screen">
-       {/* Container for Search Bar and Weather Data */}
        <div className={`border border-gray-300 rounded-lg p-6 bg-opacity-80 backdrop-blur-sm ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-         {/* Theme Toggle */}
-
-         {/* Search Bar */}
          <form onSubmit={handleSearch} className="mb-4 flex">
            <input
              type="text"
@@ -106,7 +119,7 @@ const App = () => {
                {Math.round(weatherData.main.temp)}°C
              </p>
              <p className="font-serif font-semibold mt-4">{weatherData.weather[0].description}</p>
-             <p className="flex justify-center mt-10 ">
+             <p className="flex justify-center mt-10">
                <img
                  src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
                  alt={weatherData.weather[0].description}
@@ -147,16 +160,20 @@ const App = () => {
                      strokeLinecap="round"
                      strokeLinejoin="round"
                      strokeWidth={2}
-                     d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"
+                     d="M9.59 4.59A2 2 0 0112 3h3.5a2 2 0 012 2v10a2 2 0 01-2 2H12a2 2 0 01-2-2V6a2 2 0 01-.59-1.41L6 9"
                    />
                  </svg>
-                 <span className="font-bold text-yellow-500 mr-6">
-                   Wind: {Math.round(weatherData.wind.speed)} km/h
+                 <span className="font-extrabold text-yellow-500">
+                   Wind Speed: {weatherData.wind.speed} km/h
                  </span>
                </div>
              </div>
            </div>
          )}
+
+         <div className="flex justify-center items-center">
+          
+         </div>
        </div>
      </main>
    </div>
