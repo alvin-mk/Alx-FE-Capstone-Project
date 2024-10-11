@@ -4,14 +4,10 @@ import React, { useState, useEffect } from "react";
  
 
 const App = () => {
-
- const [city, setCity] = useState("");
-
- const [weatherData, setWeatherData] = useState(null);
-
- const [error, setError] = useState(null);
-
- const [isFocused, setIsFocused] = useState(false);
+  const [city, setCity] = useState("");
+  const [weatherData, setWeatherData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isFocused, setIsFocused] = useState(false);
 
 
  
