@@ -40,6 +40,52 @@ const App = () => {
    }
  };
 
+ const fetchWeatherByCoords = async (lat, lon) => {
+   setLoading(true);
+   try {
+     const response = await fetch(
+       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+     );
+     if (!response.ok) {
+       throw new Error("Failed to fetch weather data");
+     }
+     const data = await response.json();
+     setWeatherData(data);
+     setError(null);
+   } catch (err) {
+     console.error(err);
+     setWeatherData(null);
+     setError(err.message);
+   } finally {
+     setLoading(false);
+   }
+ };
+
+ const getCurrentLocation = () => {
+   setLoading(true);
+   if ("geolocation" in navigator) {
+     navigator.geolocation.getCurrentPosition(
+       (position) => {
+         const { latitude, longitude } = position.coords;
+         fetchWeatherByCoords(latitude, longitude);
+       },
+       (err) => {
+         console.error(err);
+         setError("Unable to retrieve your location. Please search for a city manually.");
+         setLoading(false);
+       }
+     );
+   } else {
+     setError("Geolocation is not supported by your browser. Please search for a city manually.");
+     setLoading(false);
+   }
+ };
+
+ // Fetch current location weather when component mounts
+ useEffect(() => {
+   getCurrentLocation();
+ }, []);
+
  const handleSearch = (e) => {
    e.preventDefault();
    fetchWeather(city.trim());
@@ -69,16 +115,23 @@ const App = () => {
  };
 
  return (
-   <div
+   <div 
      className={`min-h-screen bg-cover bg-center transition-all duration-500 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}
      style={{ backgroundImage: getBackgroundImage() }}
    >
+     {/* Header */}
      <header className="py-7 bg-black bg-opacity-50">
        <h1 className="text-4xl font-extrabold text-center italic text-white">Weather Dashboard</h1>
      </header>
 
+     {/* Main Content */}
      <main className="flex flex-col items-center mt-5 min-h-screen">
+       {/* Container for Search Bar and Weather Data */}
        <div className={`border border-gray-300 rounded-lg p-6 bg-opacity-80 backdrop-blur-sm ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+         {/* Theme Toggle */}
+         
+
+         {/* Search Bar */}
          <form onSubmit={handleSearch} className="mb-4 flex">
            <input
              type="text"
@@ -103,6 +156,14 @@ const App = () => {
            </button>
          </form>
 
+         {/* Current Location Button */}
+         <button
+           onClick={getCurrentLocation}
+           className={`w-full font-serif p-2 rounded-full mb-4 ${darkMode ? 'bg-green-600 hover:bg-green-500' : 'bg-green-500 hover:bg-green-600'}`}
+         >
+           Use Current Location
+         </button>
+
          {/* Loading Message */}
          {loading && <p className="text-center font-semibold">Loading weather data...</p>}
 
@@ -119,7 +180,7 @@ const App = () => {
                {Math.round(weatherData.main.temp)}°C
              </p>
              <p className="font-serif font-semibold mt-4">{weatherData.weather[0].description}</p>
-             <p className="flex justify-center mt-10">
+             <p className="flex justify-center mt-10 ">
                <img
                  src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
                  alt={weatherData.weather[0].description}
@@ -160,20 +221,16 @@ const App = () => {
                      strokeLinecap="round"
                      strokeLinejoin="round"
                      strokeWidth={2}
-                     d="M9.59 4.59A2 2 0 0112 3h3.5a2 2 0 012 2v10a2 2 0 01-2 2H12a2 2 0 01-2-2V6a2 2 0 01-.59-1.41L6 9"
+                     d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"
                    />
                  </svg>
-                 <span className="font-extrabold text-yellow-500">
-                   Wind Speed: {weatherData.wind.speed} km/h
+                 <span className="font-bold text-yellow-500 mr-6">
+                   Wind: {Math.round(weatherData.wind.speed)} km/h
                  </span>
                </div>
              </div>
            </div>
          )}
-
-         <div className="flex justify-center items-center">
-          
-         </div>
        </div>
      </main>
    </div>
