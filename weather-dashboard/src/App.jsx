@@ -129,7 +129,12 @@ const App = () => {
        {/* Container for Search Bar and Weather Data */}
        <div className={`border border-gray-300 rounded-lg p-6 bg-opacity-80 backdrop-blur-sm ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
          {/* Theme Toggle */}
-         
+         <button
+           onClick={toggleDarkMode}
+           className={`mb-4 p-2 rounded-full ${darkMode ? 'bg-yellow-400 text-gray-900' : 'bg-gray-800 text-white'}`}
+         >
+           {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+         </button>
 
          {/* Search Bar */}
          <form onSubmit={handleSearch} className="mb-4 flex">
