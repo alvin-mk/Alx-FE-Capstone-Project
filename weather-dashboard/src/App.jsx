@@ -24,7 +24,16 @@ const translations = {
    lightMode: "Light Mode",
    darkMode: "Dark Mode",
  },
- 
+ sw: {
+   title: "Dashibodi ya Hali ya Hewa",
+   searchPlaceholder: "Ingiza jina la mji",
+   useCurrentLocation: "Tumia Eneo la Sasa",
+   loading: "Inapakia data ya hali ya hewa...",
+   humidity: "Unyevunyevu",
+   wind: "Upepo",
+   lightMode: "Hali ya Mwanga",
+   darkMode: "Hali ya Giza",
+ },
  es: {
    title: "Panel del Tiempo",
    searchPlaceholder: "Ingrese el nombre de la ciudad",
@@ -45,16 +54,7 @@ const translations = {
    lightMode: "Mode Clair",
    darkMode: "Mode Sombre",
  },
- sw: {
-   title: "Dashibodi ya Hali ya Hewa",
-   searchPlaceholder: "Ingiza jina la mji",
-   useCurrentLocation: "Tumia Eneo la Sasa",
-   loading: "Inapakia data ya hali ya hewa...",
-   humidity: "Unyevunyevu",
-   wind: "Upepo",
-   lightMode: "Hali ya Mwanga",
-   darkMode: "Hali ya Giza",
- },
+ 
  de: {
    title: "Wetter-Dashboard",
    searchPlaceholder: "Stadtname eingeben",
@@ -233,7 +233,7 @@ return (
            <option value="en">English</option>
            <option value="es">Español</option>
            <option value="fr">Français</option>
-          {/*  <option value="fr">Kiswahili</option>*/}
+           <option value="fr">Kiswahili</option>
            <option value="de">Deutsch</option>
            <option value="it">Italiano</option>
            <option value="pt">Português</option>
