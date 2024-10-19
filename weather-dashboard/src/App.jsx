@@ -88,7 +88,7 @@ const translations = {
  
  // Add more languages as needed here
 };
-
+     {/*fetch data and API link from openweather API*/}
 const fetchWeather = async (cityName) => {
  setLoading(true);
  try {
@@ -184,7 +184,7 @@ const toggleDarkMode = () => {
 const handleLanguageChange = (e) => {
  setLanguage(e.target.value);
 };
-
+    {/*Background images according to weather description*/}
 const getBackgroundImage = () => {
  if (!weatherData) return "";
 
@@ -217,7 +217,7 @@ return (
    <main className="flex flex-col items-center mt-5 min-h-screen">
      {/* Container for Search Bar and Weather Data */}
      <div className={`border border-gray-300 rounded-lg p-6 bg-opacity-80 backdrop-blur-sm ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-       {/* Theme Toggle and Language Selector */}
+       {/* Theme Toggle  */}
        <div className="flex justify-between mb-4">
          <button
            onClick={toggleDarkMode}
@@ -225,6 +225,7 @@ return (
          >
            {darkMode ? '☀️ ' + translations[language].lightMode : '🌙 ' + translations[language].darkMode}
          </button>
+              {/*Language selector */}
          <select
            value={language}
            onChange={handleLanguageChange}
@@ -233,7 +234,7 @@ return (
            <option value="en">English</option>
            <option value="es">Español</option>
            <option value="fr">Français</option>
-           <option value="fr">Kiswahili</option>
+          {/* <option value="fr">Kiswahili</option> */}
            <option value="de">Deutsch</option>
            <option value="it">Italiano</option>
            <option value="pt">Português</option>
